@@ -56,6 +56,9 @@ PYTHONPATH=./plugins nosetests-3.3 -s tests/
 %{python3_sitelib}/dnf-plugins/*
 
 %changelog
+* Sat Apr 12 2014 Tim Lauridsen <timlau@fedoraproject.org> 0.0.1-1
+- new package built with tito
+
 * Fri Apr 11 2014 Tim Lauridsen <timlau@fedoraproject.org> - 0.0.1-1
 - Initial package
 
