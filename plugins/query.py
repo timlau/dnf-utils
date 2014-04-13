@@ -14,57 +14,69 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-import sys
-sys.path[0] = '/home/tim/udv/work/dnf-utils/'
-
 from dnfutils import logger, _, ArgumentParser
 
 import dnf
 import dnf.cli
 import dnf.exceptions
+import hawkey
 
 
-class Sample(dnf.Plugin):
+class Query(dnf.Plugin):
 
-    name = 'Sample'
+    name = 'Query'
 
     def __init__(self, base, cli):
         self.base = base
         self.cli = cli
         logger.debug('Initialized %s plugin' % self.name)
         if self.cli is not None:
-            self.cli.register_command(SampleCommand)
+            self.cli.register_command(QueryCommand)
 
-class SampleCommand(dnf.cli.Command):
+
+class QueryCommand(dnf.cli.Command):
     """ the util command there is extending the dnf command line """
-    aliases = ['sample-util']
-    activate_sack = False  # controls if dnf.base.sack is setup
+    aliases = ['query']
+    activate_sack = True
 
     # summary for util, shown in dnf help
-    summary = _('One line description of the util')
+    summary = _('search for packages matching keyword')
     # usage string for the util
-    usage = _('[PARAMETERS]')
+    usage = _('[OPTIONS] [KEYWORDS]')
+
+    def show_packages(self, query):
+        for pkg in query.run():
+            print(pkg)
 
     def run(self, args):
         ''' execute the util action here '''
-        logger.debug('Command sample : run')
         # Setup ArgumentParser to handle util
-        self.parser = ArgumentParser(prog='dnf sample-util')
-        self.parser.add_argument("cmd", nargs=1, help='the sub command')
-        self.parser.add_argument("parms", nargs='*',
-                            help='the parameters to the sub command')
-        self.parser.add_argument("--some-option", action='store_true',
-                            help='an optional option')
+        self.parser = ArgumentParser(prog='dnf query')
+        self.parser.add_argument("key", nargs=1,
+                            help='the key to search for')
+        self.parser.add_argument("--all", action='store_true',
+                            help='query in all packages')
+        self.parser.add_argument("--installed", action='store_true',
+                            help='query in all packages')
+        self.parser.add_argument("--latest", action='store_true',
+                            help='show only latest packages')
+        logger.debug('Command sample : run')
         try:
             opts = self.parser.parse_args(args)
         except AttributeError as e:
             print(self.parser.format_help())
             raise dnf.exceptions.Error(str(e))
 
-        print('Sample util is running with :')
-        print('    cmd =       : %s' % opts.cmd)
-        print('    parms =     : %s' % opts.parms)
-        print('    some-option : %s' % opts.some_option)
+        q = self.base.sack.query()
+        if opts.all:
+            q = q.available()
+        elif opts.installed:
+            q = q.installed()
+        fdict = {'name__substr': opts.key}
+        q = q.filter(hawkey.ICASE, **fdict)
+        if opts.latest:
+            q.latest()
+        self.show_packages(q)
+
 
         return 0, ''
