@@ -1,7 +1,7 @@
 %global dnf_version 0.4.19
 
 Name:		dnf-utils
-Version:	0.0.1
+Version:	0.0.2
 Release:	1%{?dist}
 Summary:	Add-on tools for DNF
 Group:		System Environment/Base
@@ -56,6 +56,12 @@ PYTHONPATH=./plugins nosetests-3.3 -s tests/
 %{python3_sitelib}/dnf-plugins/*
 
 %changelog
+* Sun Apr 13 2014 Tim Lauridsen <timlau@fedoraproject.org> 0.0.2-1
+- build: add check Makefile target to run tests (timlau@fedoraproject.org)
+- query: added --queryformat option to specify an rpm QUERYFMT like output
+  format (timlau@fedoraproject.org)
+- query: add new query tool (timlau@fedoraproject.org)
+
 * Fri Apr 11 2014 Tim Lauridsen <timlau@fedoraproject.org> - 0.0.1-1
 - Initial package
 
