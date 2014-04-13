@@ -51,5 +51,8 @@ transifex-push:
 	tx push -s
 	@echo "You can now git commit -a -m 'Transfix push, ${PKGNAME}.pot update'"
 
+check:
+	PYTHONPATH="./:./plugins/" nosetests -s tests/
+
 FORCE:
 	
