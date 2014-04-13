@@ -1,5 +1,5 @@
-PLUGINS  = sample query
-PLUGINS3 = sample query
+PLUGINS  = query
+PLUGINS3 = query
 PYTHON=python
 PYTHON3=python3
 PACKAGE = dnf-plugins
