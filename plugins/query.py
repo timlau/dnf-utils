@@ -20,6 +20,7 @@ from dnfutils import logger, _, ArgumentParser
 import dnf
 import dnf.cli
 import dnf.exceptions
+import functools
 import hawkey
 import re
 
@@ -62,7 +63,7 @@ class QueryCommand(dnf.cli.Command):
             return '{0.' + key.lower() + fill + "}"
 
         if not qf:
-            qf = '%{name}-%{epoch}:%{version}-%{release}.%{arch}'
+            qf = '%{name}-%{epoch}:%{version}-%{release}.%{arch} : %{reponame}'
         qf = qf.replace("\\n", "\n")
         qf = qf.replace("\\t", "\t")
         fmt = re.sub(QF_MATCH, fmt_repl, qf)
@@ -81,16 +82,23 @@ class QueryCommand(dnf.cli.Command):
         ''' execute the util action here '''
         # Setup ArgumentParser to handle util
         self.parser = ArgumentParser(prog='dnf query')
-        self.parser.add_argument("key", nargs=1,
+        self.parser.add_argument("key", nargs='?',
                             help='the key to search for')
         self.parser.add_argument("--all", action='store_true',
-                            help='query in all packages')
+                            help='query in all packages (Default)')
         self.parser.add_argument("--installed", action='store_true',
-                            help='query in all packages')
+                            help='query in installed packages')
         self.parser.add_argument("--latest", action='store_true',
                             help='show only latest packages')
-        self.parser.add_argument("--queryformat",
+        self.parser.add_argument("--qf", "--queryformat", dest='queryformat',
                             help='format for displaying found packages')
+        self.parser.add_argument("--repoid", metavar='REPO',
+                            help='show only results from this REPO')
+        self.parser.add_argument("--arch", metavar='ARCH',
+                            help='show only results from this ARCH')
+        self.parser.add_argument("--provides", metavar='REQ',
+                            help='show only results there provides REQ')
+
         logger.debug('Command sample : run')
         try:
             opts = self.parser.parse_args(args)
@@ -103,11 +111,28 @@ class QueryCommand(dnf.cli.Command):
             q = q.available()
         elif opts.installed:
             q = q.installed()
-        fdict = {'name__substr': opts.key}
-        q = q.filter(hawkey.ICASE, **fdict)
         if opts.latest:
-            q.latest()
+            q = q.latest()
+        if opts.key:
+            if set(opts.key) & set("*[?"):  # is pattern ?
+                fdict = {'name__glob': opts.key}
+            else:  # substring
+                fdict = {'name__substr': opts.key}
+            q = q.filter(hawkey.ICASE, **fdict)
+        if opts.repoid:
+            q = q.filter(reponame=opts.repoid)
+        if opts.arch:
+            q = q.filter(arch=opts.arch)
+        if opts.provides:
+            q = self.by_provides(self.base.sack, [opts.provides], q)
         fmt = self.get_format(opts.queryformat)
-        print(fmt)
         self.show_packages(q, fmt)
         return 0, ''
+
+    def by_provides(self, sack, pattern, query):
+        try:
+            reldeps = list(map(functools.partial(hawkey.Reldep, sack),
+                               pattern))
+        except hawkey.ValueException:
+            return query.filter(empty=True)
+        return query.filter(provides=reldeps)
