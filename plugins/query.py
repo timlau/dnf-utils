@@ -105,8 +105,10 @@ class QueryCommand(dnf.cli.Command):
                             help='show only results from this REPO')
         self.parser.add_argument("--arch", metavar='ARCH',
                             help='show only results from this ARCH')
-        self.parser.add_argument("--provides", metavar='REQ',
+        self.parser.add_argument("--whatprovides", metavar='REQ',
                             help='show only results there provides REQ')
+        self.parser.add_argument("--whatrequires", metavar='REQ',
+                            help='show only results there requires REQ')
         self.parser.add_argument("--showtags", action='store_true',
                             help='show available tags to use with '
                                  '--queryformat')
@@ -146,8 +148,10 @@ class QueryCommand(dnf.cli.Command):
             q = q.filter(reponame=opts.repoid)
         if opts.arch:
             q = q.filter(arch=opts.arch)
-        if opts.provides:
-            q = self.by_provides(self.base.sack, [opts.provides], q)
+        if opts.whatprovides:
+            q = self.by_provides(self.base.sack, [opts.whatprovides], q)
+        if opts.whatrequires:
+            q = self.by_requires(self.base.sack, opts.whatrequires, q)
         fmt = self.get_format(opts.queryformat)
         self.show_packages(q, fmt)
         return 0, ''
@@ -159,6 +163,13 @@ class QueryCommand(dnf.cli.Command):
         except hawkey.ValueException:
             return query.filter(empty=True)
         return query.filter(provides=reldeps)
+
+    def by_requires(self, sack, pattern, query):
+        try:
+            reldep = hawkey.Reldep(sack, pattern)
+        except hawkey.ValueException:
+            return query.filter(empty=True)
+        return query.filter(requires=reldep)
 
 class PackageWrapper:
 
