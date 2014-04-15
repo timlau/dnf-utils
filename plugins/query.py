@@ -15,6 +15,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+from datetime import datetime
 from dnfutils import logger, _, ArgumentParser
 
 import dnf
@@ -26,6 +27,13 @@ import re
 
 # march a %[-][dd]{attr}
 QF_MATCH = re.compile('%([-\d]*?){([:\.\w]*?)}')
+
+QUERY_TAGS = """
+name, arch, epoch, version, release, reponame (repoid), evr
+installtime, buildtime, size, downloadsize, installize
+provides, requires, obsoletes, conflicts, sourcerpm
+description, summary, license, url
+"""
 
 
 class Query(dnf.Plugin):
@@ -70,8 +78,9 @@ class QueryCommand(dnf.cli.Command):
         return fmt
 
     def show_packages(self, query, fmt):
-        for pkg in query.run():
+        for po in query.run():
             try:
+                pkg = PackageWrapper(po)
                 print(fmt.format(pkg))
             except AttributeError as e:
                 # catch that the user has specified attributes
@@ -98,6 +107,11 @@ class QueryCommand(dnf.cli.Command):
                             help='show only results from this ARCH')
         self.parser.add_argument("--provides", metavar='REQ',
                             help='show only results there provides REQ')
+        self.parser.add_argument("--showtags", action='store_true',
+                            help='show available tags to use with '
+                                 '--queryformat')
+        self.parser.add_argument("--help-query", action='store_true',
+                                 help='show this help about query tool')
 
         logger.debug('Command sample : run')
         try:
@@ -105,6 +119,15 @@ class QueryCommand(dnf.cli.Command):
         except AttributeError as e:
             print(self.parser.format_help())
             raise dnf.exceptions.Error(str(e))
+
+        if opts.help_query:
+            print(self.parser.format_help())
+            return 0, ''
+
+        if opts.showtags:
+            print(_('Available query-tags:'))
+            print(QUERY_TAGS)
+            return 0, ''
 
         q = self.base.sack.query()
         if opts.all:
@@ -136,3 +159,57 @@ class QueryCommand(dnf.cli.Command):
         except hawkey.ValueException:
             return query.filter(empty=True)
         return query.filter(provides=reldeps)
+
+class PackageWrapper:
+
+    def __init__(self, pkg):
+        self._pkg = pkg
+
+    def __getattr__(self, attr):
+        if hasattr(self._pkg, attr):
+            return getattr(self._pkg, attr)
+        else:
+            raise AttributeError
+
+###############################################################################
+# Overloaded attributes there need output formatting
+###############################################################################
+
+
+    @property
+    def obsoletes(self):
+        return self._reldep_to_list(self._pkg.obsoletes)
+
+    @property
+    def conflicts(self):
+        return self._reldep_to_list(self._pkg.obsoletes)
+
+    @property
+    def requires(self):
+        return self._reldep_to_list(self._pkg.requires)
+
+    @property
+    def provides(self):
+        return self._reldep_to_list(self._pkg.provides)
+
+    @property
+    def installtime(self):
+        return self._get_timestamp(self._pkg.installtime)
+
+    @property
+    def buildtime(self):
+        return self._get_timestamp(self._pkg.buildtime)
+
+###############################################################################
+# Helpers
+###############################################################################
+
+    def _get_timestamp(self, timestamp):
+        if timestamp > 0:
+            dt = datetime.fromtimestamp(timestamp)
+            return dt.strftime("%Y-%m-%d %H:%M")
+        else:
+            return ""
+
+    def _reldep_to_list(self, obj):
+        return [str(reldep) for reldep in obj]
