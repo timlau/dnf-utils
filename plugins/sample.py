@@ -43,13 +43,16 @@ class SampleCommand(dnf.cli.Command):
 
     # TODO: the tool command, use your own command
     aliases = ['sample']
-    # controls if dnf.base.sack is setup
-    activate_sack = True
 
     # TODO: summary for util, shown in dnf help, add your own
     summary = _('One line description of the util')
     # TODO usage string for the util, shown by dnf help <command>
     usage = _('[PARAMETERS]')
+
+    def configure(self, args):
+        demands = self.cli.demands
+        # make dnf setup the sack
+        demands.sack_activation = True
 
     def run(self, args):
         ''' execute the util action here '''

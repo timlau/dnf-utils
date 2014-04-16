@@ -51,7 +51,6 @@ class Query(dnf.Plugin):
 class QueryCommand(dnf.cli.Command):
     """ the util command there is extending the dnf command line """
     aliases = ['query']
-    activate_sack = True
     # summary for util, shown in dnf help
     summary = _('search for packages matching keyword')
     # usage string for the util
@@ -86,6 +85,10 @@ class QueryCommand(dnf.cli.Command):
                 # catch that the user has specified attributes
                 # there don't exist on the dnf Package object.
                 raise dnf.exceptions.Error(str(e))
+
+    def configure(self, args):
+        demands = self.cli.demands
+        demands.sack_activation = True
 
     def run(self, args):
         ''' execute the util action here '''
