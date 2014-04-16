@@ -92,28 +92,28 @@ class QueryCommand(dnf.cli.Command):
         # Setup ArgumentParser to handle util
         self.parser = ArgumentParser(prog='dnf query')
         self.parser.add_argument("key", nargs='?',
-                            help='the key to search for')
+                            help=_('the key to search for'))
         self.parser.add_argument("--all", action='store_true',
-                            help='query in all packages (Default)')
+                            help=_('query in all packages (Default)'))
         self.parser.add_argument("--installed", action='store_true',
-                            help='query in installed packages')
+                            help=_('query in installed packages'))
         self.parser.add_argument("--latest", action='store_true',
-                            help='show only latest packages')
+                            help=_('show only latest packages'))
         self.parser.add_argument("--qf", "--queryformat", dest='queryformat',
-                            help='format for displaying found packages')
+                            help=_('format for displaying found packages'))
         self.parser.add_argument("--repoid", metavar='REPO',
-                            help='show only results from this REPO')
+                            help=_('show only results from this REPO'))
         self.parser.add_argument("--arch", metavar='ARCH',
-                            help='show only results from this ARCH')
+                            help=_('show only results from this ARCH'))
         self.parser.add_argument("--whatprovides", metavar='REQ',
-                            help='show only results there provides REQ')
+                            help=_('show only results there provides REQ'))
         self.parser.add_argument("--whatrequires", metavar='REQ',
-                            help='show only results there requires REQ')
+                            help=_('show only results there requires REQ'))
         self.parser.add_argument("--showtags", action='store_true',
-                            help='show available tags to use with '
-                                 '--queryformat')
+                            help=_('show available tags to use with '
+                                 '--queryformat'))
         self.parser.add_argument("--help-query", action='store_true',
-                                 help='show this help about query tool')
+                                 help=_('show this help about query tool'))
 
         logger.debug('Command sample : run')
         try:

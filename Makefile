@@ -2,7 +2,7 @@ PKGNAME = dnf-utils
 SUBDIRS = po plugins dnfutils
 VERSION=$(shell awk '/Version:/ { print $$2 }' package/${PKGNAME}.spec)
 TX_PRJ = dnf-utils
-TX_RESOURCE = dnf-utils.master
+TX_RESOURCE = master
 TEST_LIBPATH= ${DNF_LIBPATH}:./:./plugins
 
 
@@ -40,7 +40,7 @@ test-rpms:
 transifex-setup:
 	tx init
 	tx set --auto-remote https://www.transifex.com/projects/p/${TX_PRJ}/
-	tx set --auto-local  -r ${TX_RESOURCE} 'po/<lang>.po' --source-lang en --source-file po/${PKGNAME}.pot --execute
+	tx set --auto-local  -r ${TX_PRJ}.${TX_RESOURCE} 'po/<lang>.po' --source-lang en --source-file po/${PKGNAME}.pot --execute
 
 transifex-pull:
 	tx pull -a -f

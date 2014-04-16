@@ -1,2 +1,3 @@
+plugins/query.py
 plugins/sample.py
 dnfutils/__init__.py
