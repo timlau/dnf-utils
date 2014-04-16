@@ -51,8 +51,8 @@ class SampleCommand(dnf.cli.Command):
 
     def configure(self, args):
         demands = self.cli.demands
-        # make dnf setup the sack
         demands.sack_activation = True
+        demands.available_repos = True
 
     def run(self, args):
         ''' execute the util action here '''

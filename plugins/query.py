@@ -89,6 +89,7 @@ class QueryCommand(dnf.cli.Command):
     def configure(self, args):
         demands = self.cli.demands
         demands.sack_activation = True
+        demands.available_repos = True
 
     def run(self, args):
         ''' execute the util action here '''
@@ -174,6 +175,7 @@ class QueryCommand(dnf.cli.Command):
             return query.filter(empty=True)
         return query.filter(requires=reldep)
 
+
 class PackageWrapper:
 
     def __init__(self, pkg):
@@ -188,7 +190,6 @@ class PackageWrapper:
 ###############################################################################
 # Overloaded attributes there need output formatting
 ###############################################################################
-
 
     @property
     def obsoletes(self):
