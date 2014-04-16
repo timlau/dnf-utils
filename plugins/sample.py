@@ -15,9 +15,6 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-import sys
-sys.path[0] = '/home/tim/udv/work/dnf-utils/'
-
 from dnfutils import logger, _, ArgumentParser
 
 import dnf
@@ -25,43 +22,67 @@ import dnf.cli
 import dnf.exceptions
 
 
+# TODO: dnf Plugin class, rename to your <Command>
 class Sample(dnf.Plugin):
 
-    name = 'Sample'
+    # TODO: Use your own command name here
+    name = 'sample'
 
     def __init__(self, base, cli):
         self.base = base
         self.cli = cli
         logger.debug('Initialized %s plugin' % self.name)
         if self.cli is not None:
+            # TODO: use your own <Command>Command class here
             self.cli.register_command(SampleCommand)
 
+
+# TODO: dnf Command class, rename to your <Command>Command
 class SampleCommand(dnf.cli.Command):
     """ the util command there is extending the dnf command line """
-    aliases = ['sample-util']
-    activate_sack = False  # controls if dnf.base.sack is setup
 
-    # summary for util, shown in dnf help
+    # TODO: the tool command, use your own command
+    aliases = ['sample']
+    # controls if dnf.base.sack is setup
+    activate_sack = True
+
+    # TODO: summary for util, shown in dnf help, add your own
     summary = _('One line description of the util')
-    # usage string for the util
+    # TODO usage string for the util, shown by dnf help <command>
     usage = _('[PARAMETERS]')
 
     def run(self, args):
         ''' execute the util action here '''
         logger.debug('Command sample : run')
         # Setup ArgumentParser to handle util
-        self.parser = ArgumentParser(prog='dnf sample-util')
+        # You must only add options not used by dnf already
+        self.parser = ArgumentParser(prog='dnf ' + self.aliases[0])
+        # a help-<command> is required for every tool
+        # TODO: rename to your command
+        self.parser.add_argument("--help-sample", action='store_true',
+                                 help=_('show this help about query tool'))
+
+        # TODO: example options/arg add your own
         self.parser.add_argument("cmd", nargs=1, help='the sub command')
         self.parser.add_argument("parms", nargs='*',
                             help='the parameters to the sub command')
         self.parser.add_argument("--some-option", action='store_true',
                             help='an optional option')
+
+        # parse the options/args
+        # list available options/args on errors & exit
         try:
             opts = self.parser.parse_args(args)
         except AttributeError as e:
             print(self.parser.format_help())
             raise dnf.exceptions.Error(str(e))
 
+        # TODO: a help-<command> is required for every tool
+        if opts.help_sample:
+            print(self.parser.format_help())
+            return 0, ''
+
+        # TODO: the main tool code, add your own
         print('Sample util is running with :')
         print('    cmd =       : %s' % opts.cmd)
         print('    parms =     : %s' % opts.parms)
