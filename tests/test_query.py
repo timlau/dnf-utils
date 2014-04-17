@@ -20,6 +20,7 @@ from support import mock
 import unittest
 import query
 
+
 class Pkg:
     def __init__(self):
         self.name = "foobar"
@@ -27,6 +28,7 @@ class Pkg:
         self.release = '1.f20'
         self.arch = 'x86_64'
         self.reponame = "@System"
+
 
 class SampleCommandTest(unittest.TestCase):
 

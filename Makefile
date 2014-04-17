@@ -31,6 +31,10 @@ run-tests:
 	@PYTHONPATH=${TEST_LIBPATH} nosetests-2.7 tests/	
 	@PYTHONPATH=${TEST_LIBPATH} nosetests-3.3 tests/	
 	
+run-tests-verbose:
+	@PYTHONPATH=${TEST_LIBPATH} nosetests-2.7 -s -v tests/	
+	@PYTHONPATH=${TEST_LIBPATH} nosetests-3.3 -s -v tests/	
+
 rpms:
 	tito build --rpm
 	

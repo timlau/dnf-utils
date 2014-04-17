@@ -18,10 +18,27 @@
 """ Common code for dnf-utils"""
 from __future__ import print_function
 
+from gettext import NullTranslations
+from sys import version_info
+
 import argparse
 import dnf.exceptions
 import gettext
 import logging
+
+#lint:disable
+# python 3 compabillity settings
+if version_info.major >= 3:
+    PY3 = True
+    basestring = unicode = str
+    # u?gettext dont exists in python3 NullTranslations
+    NullTranslations.ugettext = NullTranslations.gettext
+    NullTranslations.ungettext = NullTranslations.ngettext
+else:
+    from __builtin__ import unicode, basestring
+    PY3 = False
+
+#lint:enable
 
 t = gettext.translation('dnf-utils', fallback=True)
 _ = t.ugettext
@@ -41,8 +58,7 @@ class ArgumentParser(argparse.ArgumentParser):
     def __init__(self, cmd, **kwargs):
         argparse.ArgumentParser.__init__(self, prog="dnf {}".format(cmd),
                                          add_help=False, **kwargs)
-        self.add_argument("--help-{}".format(cmd), action='store_true',
-                          dest='help_tool',
+        self.add_argument("--show-help".format(cmd), action='store_true',
                           help=_('show this help about this tool'))
 
     def error(self, message):
@@ -61,4 +77,3 @@ class ArgumentParser(argparse.ArgumentParser):
             print(self.format_help())
             raise dnf.exceptions.Error(str(e))
         return opts
-
