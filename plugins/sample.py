@@ -71,8 +71,8 @@ class SampleCommand(dnf.cli.Command):
         # list available options/args on errors & exit
         opts = self.parser.parse_args(args)
 
-        # TODO: a help-<command> is required for every tool
-        if opts.help_tool:
+        # show util help & exit
+        if opts.show_help:
             print(self.parser.format_help())
             return 0, ''
 

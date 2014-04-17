@@ -119,7 +119,7 @@ class QueryCommand(dnf.cli.Command):
         logger.debug('Command sample : run')
         opts = self.parser.parse_args(args)
 
-        if opts.help_tool:
+        if opts.show_help:  # show help and exit
             print(self.parser.format_help())
             return 0, ''
 
