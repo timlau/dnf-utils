@@ -59,12 +59,7 @@ class SampleCommand(dnf.cli.Command):
         logger.debug('Command sample : run')
         # Setup ArgumentParser to handle util
         # You must only add options not used by dnf already
-        self.parser = ArgumentParser(prog='dnf ' + self.aliases[0])
-        # a help-<command> is required for every tool
-        # TODO: rename to your command
-        self.parser.add_argument("--help-sample", action='store_true',
-                                 help=_('show this help about query tool'))
-
+        self.parser = ArgumentParser(self.aliases[0])
         # TODO: example options/arg add your own
         self.parser.add_argument("cmd", nargs=1, help='the sub command')
         self.parser.add_argument("parms", nargs='*',
@@ -74,14 +69,10 @@ class SampleCommand(dnf.cli.Command):
 
         # parse the options/args
         # list available options/args on errors & exit
-        try:
-            opts = self.parser.parse_args(args)
-        except AttributeError as e:
-            print(self.parser.format_help())
-            raise dnf.exceptions.Error(str(e))
+        opts = self.parser.parse_args(args)
 
         # TODO: a help-<command> is required for every tool
-        if opts.help_sample:
+        if opts.help_tool:
             print(self.parser.format_help())
             return 0, ''
 

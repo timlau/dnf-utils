@@ -94,7 +94,7 @@ class QueryCommand(dnf.cli.Command):
     def run(self, args):
         ''' execute the util action here '''
         # Setup ArgumentParser to handle util
-        self.parser = ArgumentParser(prog='dnf query')
+        self.parser = ArgumentParser(self.aliases[0])
         self.parser.add_argument("key", nargs='?',
                             help=_('the key to search for'))
         self.parser.add_argument("--all", action='store_true',
@@ -116,22 +116,15 @@ class QueryCommand(dnf.cli.Command):
         self.parser.add_argument("--showtags", action='store_true',
                             help=_('show available tags to use with '
                                  '--queryformat'))
-        self.parser.add_argument("--help-query", action='store_true',
-                                 help=_('show this help about query tool'))
-
         logger.debug('Command sample : run')
-        try:
-            opts = self.parser.parse_args(args)
-        except AttributeError as e:
-            print(self.parser.format_help())
-            raise dnf.exceptions.Error(str(e))
+        opts = self.parser.parse_args(args)
 
-        if opts.help_query:
+        if opts.help_tool:
             print(self.parser.format_help())
             return 0, ''
 
         if opts.showtags:
-            print(_('Available query-tags:'))
+            print(_('Available query-tags: use --queryformat ".. %{tag} .."'))
             print(QUERY_TAGS)
             return 0, ''
 

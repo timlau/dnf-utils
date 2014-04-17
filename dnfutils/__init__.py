@@ -16,8 +16,10 @@
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 """ Common code for dnf-utils"""
+from __future__ import print_function
 
 import argparse
+import dnf.exceptions
 import gettext
 import logging
 
@@ -36,8 +38,12 @@ class ArgumentParser(argparse.ArgumentParser):
     Use it to parse parameter send to the util cmd from DNF.
     """
 
-    def __init__(self, **kwargs):
-        argparse.ArgumentParser.__init__(self, add_help=False, **kwargs)
+    def __init__(self, cmd, **kwargs):
+        argparse.ArgumentParser.__init__(self, prog="dnf {}".format(cmd),
+                                         add_help=False, **kwargs)
+        self.add_argument("--help-{}".format(cmd), action='store_true',
+                          dest='help_tool',
+                          help=_('show this help about this tool'))
 
     def error(self, message):
         ''' overload the default error method
@@ -47,3 +53,12 @@ class ArgumentParser(argparse.ArgumentParser):
         catch
         '''
         raise AttributeError(message)
+
+    def parse_args(self, args):
+        try:
+            opts = argparse.ArgumentParser.parse_args(self, args)
+        except AttributeError as e:
+            print(self.format_help())
+            raise dnf.exceptions.Error(str(e))
+        return opts
+
