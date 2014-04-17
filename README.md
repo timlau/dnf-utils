@@ -41,8 +41,7 @@ If you want to make a new tool.
 2. Use the plugins/sample.py as a template of an new util and make it your own (See the TODO's in the code)
 3. Follow the [DNF hacking guidelines](https://github.com/akozumpl/dnf/wiki/Hacking)
 4. Code must work in both Python 2 & 3, if possible
-5. The tool must contain a --help-**command** there is displaying help about the tool
-6. If it make sense, then add unittest for testing your code
+5. If it make sense, then add unittest for testing your code
 6. Submit a pull request for your new tool
 
 
