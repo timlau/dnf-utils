@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-16 10:02+0200\n"
+"POT-Creation-Date: 2014-04-17 07:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,70 +18,70 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. summary for util, shown in dnf help
-#: ../plugins/query.py:56
+#: ../plugins/query.py:55
 msgid "search for packages matching keyword"
 msgstr ""
 
 #. usage string for the util
-#: ../plugins/query.py:58
+#: ../plugins/query.py:57
 msgid "[OPTIONS] [KEYWORDS]"
 msgstr ""
 
-#: ../plugins/query.py:95
+#: ../plugins/query.py:99
 msgid "the key to search for"
 msgstr ""
 
-#: ../plugins/query.py:97
+#: ../plugins/query.py:101
 msgid "query in all packages (Default)"
 msgstr ""
 
-#: ../plugins/query.py:99
+#: ../plugins/query.py:103
 msgid "query in installed packages"
 msgstr ""
 
-#: ../plugins/query.py:101
+#: ../plugins/query.py:105
 msgid "show only latest packages"
 msgstr ""
 
-#: ../plugins/query.py:103
+#: ../plugins/query.py:107
 msgid "format for displaying found packages"
 msgstr ""
 
-#: ../plugins/query.py:105
+#: ../plugins/query.py:109
 msgid "show only results from this REPO"
 msgstr ""
 
-#: ../plugins/query.py:107
+#: ../plugins/query.py:111
 msgid "show only results from this ARCH"
 msgstr ""
 
-#: ../plugins/query.py:109
+#: ../plugins/query.py:113
 msgid "show only results there provides REQ"
 msgstr ""
 
-#: ../plugins/query.py:111
+#: ../plugins/query.py:115
 msgid "show only results there requires REQ"
 msgstr ""
 
-#: ../plugins/query.py:113
+#: ../plugins/query.py:117
 msgid "show available tags to use with --queryformat"
 msgstr ""
 
-#: ../plugins/query.py:116
-msgid "show this help about query tool"
+#: ../plugins/query.py:127
+#, python-brace-format
+msgid "Available query-tags: use --queryformat \".. %{tag} ..\""
 msgstr ""
 
-#: ../plugins/query.py:130
-msgid "Available query-tags:"
-msgstr ""
-
-#. controls if dnf.base.sack is setup
-#. summary for util, shown in dnf help
-#: ../plugins/sample.py:45
+#. TODO: summary for util, shown in dnf help, add your own
+#: ../plugins/sample.py:48
 msgid "One line description of the util"
 msgstr ""
 
-#. usage string for the util
-#: ../plugins/sample.py:47
+#. TODO usage string for the util, shown by dnf help <command>
+#: ../plugins/sample.py:50
 msgid "[PARAMETERS]"
+msgstr ""
+
+#: ../dnfutils/__init__.py:46
+msgid "show this help about this tool"
 msgstr ""
