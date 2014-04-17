@@ -220,4 +220,4 @@ class PackageWrapper:
             return ""
 
     def _reldep_to_list(self, obj):
-        return [str(reldep) for reldep in obj]
+        return ", ".join([str(reldep) for reldep in obj])
