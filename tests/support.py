@@ -28,6 +28,7 @@ if PY3:
 else:
     import mock
 
+
 class BaseCliStub(object):
     """A class mocking `dnf.cli.cli.BaseCli`."""
 
@@ -61,6 +62,7 @@ class BaseCliStub(object):
         if not self._available_groups:
             raise dnf.exceptions.CompsError('no group available')
 
+
 class CliStub(object):
     """A class mocking `dnf.cli.Cli`."""
 
@@ -77,10 +79,11 @@ class CliStub(object):
         """Register given *command*."""
         self.cli_commands.update({alias: command for alias in command.aliases})
 
+
 class RepoStub(object):
     """A class mocking `dnf.repo.Repo`"""
 
-    enabled = True
+    enabled = False
 
     def __init__(self, id_):
         """Initialize the repository."""
@@ -88,3 +91,114 @@ class RepoStub(object):
 
     def valid(self):
         """Return a message if the repository is not valid."""
+
+    def enable(self):
+        """ Enable the repo"""
+        self.enabled = True
+
+    def disable(self):
+        """ Disable the repo"""
+        self.enabled = False
+
+
+class PkgStub:
+    def __init__(self, n, e, v, r, a, repo_id):
+        """ mocking dnf.package.Package"""
+        self.name = n
+        self.version = v
+        self.release = r
+        self.arch = a
+        self.epoch = e
+        self.reponame = repo_id
+
+    def __str__(self):
+        return "{0.name}-{0.evr}.{0.arch} : ({0.reponame})".format(self)
+
+    @property
+    def evr(self):
+        if self.epoch != '0':
+            return "{0.epoch}:{0.version}-{0.release}".format(self)
+        else:
+            return "{0.version}-{0.release}".format(self)
+
+    @property
+    def sourcerpm(self):
+        if self.arch != 'src':
+            return "{0.name}-{0.evr}.src.rpm".format(self)
+        else:
+            return "{0.name}-{0.evr}.{0.arch}.rpm".format(self)
+
+    @property
+    def fullname(self):
+        return "{0.name}-{0.evr}.{0.arch}".format(self)
+
+    def localPkg(self):
+        return "/tmp/dnf/{0.name}-{0.evr}.{0.arch}.rpm".format(self)
+
+
+class QueryStub(object):
+    """ mocking dnf'.sack.Sack'"""
+    def __init__(self, inst, avail, latest, sources):
+        self._inst = inst
+        self._avail = avail
+        self._latest = latest
+        self._sources = sources
+        self._all = []
+        self._all.extend(inst)
+        self._all.extend(avail)
+
+    def available(self):
+        return self.filter(available=True)
+
+    def installed(self):
+        return self.filter(installed=True)
+
+    def latest(self):
+        return self.filter(latest=True)
+
+    def filter(self, **kwargs):
+        if 'available' in kwargs:
+            return self._avail
+        elif 'installed' in kwargs:
+            return self._inst
+        elif 'latest' in kwargs:
+            return self._latest
+        elif 'name' in kwargs:
+            name = kwargs['name']
+            return [pkg for pkg in self._all if pkg.name == name]
+        elif 'sourcerpm' in kwargs:
+            src_name = kwargs['sourcerpm']
+            return [pkg for pkg in self._sources if pkg.sourcerpm == src_name]
+
+
+PACKAGES_AVAIL = [
+PkgStub('foo', '0', '1.0', '1', 'noarch', 'test-repo'),
+PkgStub('foo', '0', '2.0', '1', 'noarch', 'test-repo'),
+PkgStub('bar', '0', '1.0', '1', 'noarch', 'test-repo'),
+PkgStub('bar', '0', '2.0', '1', 'noarch', 'test-repo'),
+PkgStub('foobar', '0', '1.0', '1', 'noarch', 'test-repo'),
+PkgStub('foobar', '0', '2.0', '1', 'noarch', 'test-repo')
+]
+
+PACKAGES_LASTEST = [
+PACKAGES_AVAIL[1],
+PACKAGES_AVAIL[3],
+PACKAGES_AVAIL[5]
+]
+
+PACKAGES_INST = [
+PkgStub('foo', '0', '1.0', '1', 'noarch', '@System'),
+PkgStub('foobar', '0', '1.0', '1', 'noarch', '@System')
+]
+
+PACKAGES_SOURCE = [
+PkgStub('foo', '0', '1.0', '1', 'src', 'test-repo-source'),
+PkgStub('foo', '0', '2.0', '1', 'src', 'test-repo-source'),
+PkgStub('bar', '0', '1.0', '1', 'src', 'test-repo-source'),
+PkgStub('bar', '0', '2.0', '1', 'src', 'test-repo-source'),
+PkgStub('foobar', '0', '1.0', '1', 'src', 'test-repo-source'),
+PkgStub('foobar', '0', '2.0', '1', 'src', 'test-repo-source')
+]
+
+Query = QueryStub(PACKAGES_INST, PACKAGES_AVAIL,
+                  PACKAGES_LASTEST, PACKAGES_SOURCE)
