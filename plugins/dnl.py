@@ -134,10 +134,22 @@ class DnlCommand(dnf.cli.Command):
         self.base.fill_sack()
 
     def _latest_available(self, pkg_spec):
-        subj = dnf.subject.Subject(pkg_spec)
-        q = subj.get_best_query(self.base.sack)
+        if '.src.rpm' in pkg_spec:
+            return self._latest_available_source(pkg_spec)
+        else:
+            subj = dnf.subject.Subject(pkg_spec)
+            q = subj.get_best_query(self.base.sack)
+            q = q.available()
+            q = q.latest()
+            return q
+
+    def _latest_available_source(self, pkg_spec):
+        pkg_spec = pkg_spec[:-8]
+        n, v, r = pkg_spec.split('-')
+        q = self.base.sack.query()
         q = q.available()
         q = q.latest()
+        q = q.filter(name=n, version=v, release=r, arch='src')
         return q
 
     def _move_package(self, target, location):
