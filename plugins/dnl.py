@@ -100,8 +100,10 @@ class DnlCommand(dnf.cli.Command):
         source_pkgs = set()
         for pkg in pkgs:
             source_pkgs.add(pkg.sourcerpm)
+            logger.debug("  --> Package {0} Source : {1}".format(str(pkg), pkg.sourcerpm))
         self._enable_source_repos()
         pkgs = self._get_packages(list(source_pkgs))
+        print(pkgs)
         self.base.download_packages(pkgs, self.base.output.progress)
         locations = sorted([pkg.localPkg() for pkg in pkgs])
         return locations
@@ -116,7 +118,6 @@ class DnlCommand(dnf.cli.Command):
         repo_dict = {}
         # find the source repos for the enabled binary repos
         for repo in self.base.repos.iter_enabled():
-            print(repo.id)
             source_repo = "{}-source".format(repo.id)
             if source_repo in self.base.repos:
                 repo_dict[repo.id] = (repo, self.base.repos[source_repo])
@@ -127,6 +128,7 @@ class DnlCommand(dnf.cli.Command):
             repo, src_repo = repo_dict[id_]
             repo.disable()
             if src_repo:
+                logger.info(_("enabled {} repository").format(src_repo.id))
                 src_repo.enable()
        # reload the sack
         self.base.fill_sack()
@@ -138,8 +140,7 @@ class DnlCommand(dnf.cli.Command):
         q = q.latest()
         return q
 
-    def _move_package(self, target, pkg):
-        location = pkg.localPkg()
+    def _move_package(self, target, location):
         shutil.copy(location, target)
         os.unlink(location)
         return target
