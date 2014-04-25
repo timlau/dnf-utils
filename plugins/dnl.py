@@ -100,10 +100,10 @@ class DnlCommand(dnf.cli.Command):
         source_pkgs = set()
         for pkg in pkgs:
             source_pkgs.add(pkg.sourcerpm)
-            logger.debug("  --> Package {0} Source : {1}".format(str(pkg), pkg.sourcerpm))
+            logger.debug("  --> Package {0} Source : {1}"
+                         .format(str(pkg), pkg.sourcerpm))
         self._enable_source_repos()
         pkgs = self._get_packages(list(source_pkgs))
-        print(pkgs)
         self.base.download_packages(pkgs, self.base.output.progress)
         locations = sorted([pkg.localPkg() for pkg in pkgs])
         return locations
