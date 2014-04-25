@@ -27,7 +27,6 @@ class DnlCommandTest(unittest.TestCase):
 
     def setUp(self):
         def stub_fn(pkg_spec):
-            print("stub: ", pkg_spec)
             if '.src.rpm' in pkg_spec:
                 return support.Query.filter(sourcerpm=pkg_spec)
             else:
@@ -36,7 +35,8 @@ class DnlCommandTest(unittest.TestCase):
         cli = mock.MagicMock()
         self.cmd = dnl.DnlCommand(cli)
         self.cmd.cli.base.repos = dnf.repodict.RepoDict()
-        self.cmd._latest_available = stub_fn
+        self.cmd._get_query = stub_fn
+        self.cmd._get_query_source = stub_fn
         repo = RepoStub('foo')
         repo.enable()
         self.cmd.base.repos.add(repo)
@@ -67,14 +67,27 @@ class DnlCommandTest(unittest.TestCase):
         self.assertFalse(repos['foobar-source'].enabled)
         print(self.cmd.base.fill_sack.called)
 
-    def test_latest_available(self):
+    def test_get_source_packages(self):
         print()
-        found = self.cmd._latest_available('foo')
+        pkg = support.PkgStub('foo', '0', '1.0', '1', 'noarch', 'test-repo')
+        found = self.cmd._get_source_packages([pkg])
+        self.assertEqual(found[0], 'foo-1.0-1.src.rpm')
+
+    def test_get_query(self):
+        print()
+        found = self.cmd._get_query('foo')
         self.assertEqual(len(found), 1)
         self.assertEqual(found[0].name, 'foo')
-        found = self.cmd._latest_available('bar')
+        found = self.cmd._get_query('bar')
         self.assertEqual(len(found), 1)
         self.assertEqual(found[0].name, 'bar')
+
+    def test_get_query_source(self):
+        print()
+        pkgs = self.cmd._get_query_source('foo-2.0-1.src.rpm')
+        self.assertEqual(len(pkgs), 1)
+        self.assertEqual(pkgs[0].arch, 'src')
+        self.assertEqual(pkgs[0].reponame, 'test-repo-source')
 
     def test_get_packages(self):
         print()
@@ -90,6 +103,10 @@ class DnlCommandTest(unittest.TestCase):
         pkgs = self.cmd._get_packages(['notfound', 'bar'])
         self.assertEqual(len(pkgs), 1)
         self.assertEqual(pkgs[0].name, 'bar')
+        pkgs = self.cmd._get_packages(['foo-2.0-1.src.rpm'], source=True)
+        self.assertEqual(len(pkgs), 1)
+        self.assertEqual(pkgs[0].arch, 'src')
+        self.assertEqual(pkgs[0].reponame, 'test-repo-source')
 
     def test_download_rpms(self):
         print()

@@ -97,24 +97,36 @@ class DnlCommand(dnf.cli.Command):
     def _download_source(self, pkg_specs):
         """ Download source packages to dnf cache """
         pkgs = self._get_packages(pkg_specs)
+        source_pkgs = self._get_source_packages(pkgs)
+        self._enable_source_repos()
+        pkgs = self._get_packages(source_pkgs, source = True)
+        self.base.download_packages(pkgs, self.base.output.progress)
+        locations = sorted([pkg.localPkg() for pkg in pkgs])
+        return locations
+
+    def _get_packages(self, pkg_specs, source = False):
+        """ get packages matching pkg_specs """
+        if source:
+            queries = map(self._get_query_source, pkg_specs)
+        else:
+            queries = map(self._get_query, pkg_specs)
+        pkgs = list(itertools.chain(*queries))
+        return pkgs
+
+    def _get_source_packages(self, pkgs):
+        """ get list of source rpm names for a list of packages """
         source_pkgs = set()
         for pkg in pkgs:
             source_pkgs.add(pkg.sourcerpm)
             logger.debug("  --> Package {0} Source : {1}"
                          .format(str(pkg), pkg.sourcerpm))
-        self._enable_source_repos()
-        pkgs = self._get_packages(list(source_pkgs))
-        self.base.download_packages(pkgs, self.base.output.progress)
-        locations = sorted([pkg.localPkg() for pkg in pkgs])
-        return locations
-
-    def _get_packages(self, pkg_specs):
-        """ get list of packages matching pkg_specs"""
-        queries = map(self._latest_available, pkg_specs)
-        pkgs = list(itertools.chain(*queries))
-        return pkgs
+        return list(source_pkgs)
 
     def _enable_source_repos(self):
+        """ enable source repositories for enabled binary repositories
+
+        binary repositories will be disabled and the dnf sack will be reloaded
+        """
         repo_dict = {}
         # find the source repos for the enabled binary repos
         for repo in self.base.repos.iter_enabled():
@@ -133,18 +145,17 @@ class DnlCommand(dnf.cli.Command):
        # reload the sack
         self.base.fill_sack()
 
-    def _latest_available(self, pkg_spec):
-        if '.src.rpm' in pkg_spec:
-            return self._latest_available_source(pkg_spec)
-        else:
-            subj = dnf.subject.Subject(pkg_spec)
-            q = subj.get_best_query(self.base.sack)
-            q = q.available()
-            q = q.latest()
-            return q
+    def _get_query(self, pkg_spec):
+        """ return a query to match a pkg_spec"""
+        subj = dnf.subject.Subject(pkg_spec)
+        q = subj.get_best_query(self.base.sack)
+        q = q.available()
+        q = q.latest()
+        return q
 
-    def _latest_available_source(self, pkg_spec):
-        pkg_spec = pkg_spec[:-8]
+    def _get_query_source(self, pkg_spec):
+        """" return a query to match a source rpm file name """
+        pkg_spec = pkg_spec[:-8]  # skip the .src.rpm
         n, v, r = pkg_spec.split('-')
         q = self.base.sack.query()
         q = q.available()
@@ -153,6 +164,7 @@ class DnlCommand(dnf.cli.Command):
         return q
 
     def _move_package(self, target, location):
+        """ move a package """
         shutil.copy(location, target)
         os.unlink(location)
         return target
