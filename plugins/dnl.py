@@ -61,7 +61,7 @@ class DnlCommand(dnf.cli.Command):
                             help=_('packages to download'))
         self.parser.add_argument("--source", action='store_true',
                             help=_('download the src.rpm instead'))
-        self.parser.add_argument("--dest-dir",
+        self.parser.add_argument("--destdir",
                             help=_('download path, default is current dir'))
 
         # parse the options/args
@@ -78,8 +78,8 @@ class DnlCommand(dnf.cli.Command):
         else:
             locations = self._download_rpms(opts.packages)
 
-        if opts.dest_dir:
-            dest = opts.dest_dir
+        if opts.destdir:
+            dest = opts.destdir
         else:
             dest = os.getcwd()
 
