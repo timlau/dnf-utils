@@ -99,12 +99,12 @@ class DnlCommand(dnf.cli.Command):
         pkgs = self._get_packages(pkg_specs)
         source_pkgs = self._get_source_packages(pkgs)
         self._enable_source_repos()
-        pkgs = self._get_packages(source_pkgs, source = True)
+        pkgs = self._get_packages(source_pkgs, source=True)
         self.base.download_packages(pkgs, self.base.output.progress)
         locations = sorted([pkg.localPkg() for pkg in pkgs])
         return locations
 
-    def _get_packages(self, pkg_specs, source = False):
+    def _get_packages(self, pkg_specs, source=False):
         """ get packages matching pkg_specs """
         if source:
             queries = map(self._get_query_source, pkg_specs)
