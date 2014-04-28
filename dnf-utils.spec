@@ -12,6 +12,7 @@ Source0:	https://github.com/timlau/dnf-utils/archive/%{name}-%{version}.tar.gz
 BuildArch:	noarch
 BuildRequires:	python-nose
 BuildRequires:	python2-devel
+BuildRequires:	gettext
 BuildRequires:	dnf >= %{dnf_version}
 Requires:	dnf >= %{dnf_version}
 
@@ -57,29 +58,14 @@ PYTHONPATH=./plugins nosetests-3.3 -s tests/
 
 %changelog
 * Mon Apr 28 2014 Tim Lauridsen <timlau@fedoraproject.org> 0.0.3-1
-- dnl: PEP8 cleanup (timlau@fedoraproject.org)
-- dnl: code cleanup and better docstrings (timlau@fedoraproject.org)
-- dnl: remove debug prints (timlau@fedoraproject.org)
-- dnl: --dest-dir --> -destdir like yumdownloader (timlau@fedoraproject.org)
-- dnl: fix downloading of source package (timlau@fedoraproject.org)
-- dnl: fix move and pep8 fixes in tests (timlau@fedoraproject.org)
 - dnl: added new dnl tool (timlau@fedoraproject.org)
 - query: show list tags as comma separated (timlau@fedoraproject.org)
-- doc: update README (timlau@fedoraproject.org)
 - --show-help support in tools (timlau@fedoraproject.org)
 - tests: python 3 compabiltty and unittest for shared lib
   (timlau@fedoraproject.org)
 - pushed translation strings to transifex (timlau@fedoraproject.org)
-- move common functionality into custom ArgumentParser to avoil code
+- move common functionality into custom ArgumentParser to avoid code
   duplication (timlau@fedoraproject.org)
-- set demands.available_repos flag to get available repos loaded into the sack
-  (timlau@fedoraproject.org)
-- use dnf.cli.demands in configure instead of class attrubute
-  (timlau@fedoraproject.org)
-- fix not show text in README (timlau@fedoraproject.org)
-- doc: Add more info to README (timlau@fedoraproject.org)
-- update the sample template tool with comment about what is needed to be
-  changed/added for a new tool. (timlau@fedoraproject.org)
 - add real transifex setup. added translation wrapper til query tool refreshed
   translations (timlau@fedoraproject.org)
 - added --whatrequires renamed --provides to --whatprovides
