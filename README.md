@@ -17,13 +17,7 @@ dnf <commmand> [parameters]
 to get help about the tool, use the following command
 
 ```
-dnf <command> --help-<command>
-```
-
-Example: (To get help about the **query** tool)
-
-```
-dnf query --help-query
+dnf <command> --show-help
 ```
 
 Tools
