@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dnf-utils\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-16 10:02+0200\n"
-"PO-Revision-Date: 2014-04-16 08:09+0000\n"
+"POT-Creation-Date: 2014-04-28 07:27+0200\n"
+"PO-Revision-Date: 2014-04-17 05:51+0000\n"
 "Last-Translator: Tim Lauridsen <tla@rasmil.dk>\n"
 "Language-Team: Danish (http://www.transifex.com/projects/p/dnf-utils/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -19,70 +19,70 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. summary for util, shown in dnf help
-#: ../plugins/query.py:56
+#: ../plugins/query.py:55
 msgid "search for packages matching keyword"
 msgstr "søgning på pakker efter nøgle ord"
 
 #. usage string for the util
-#: ../plugins/query.py:58
+#: ../plugins/query.py:57
 msgid "[OPTIONS] [KEYWORDS]"
 msgstr "[INDSTILLINGER] [NØGLEORD]"
 
-#: ../plugins/query.py:95
+#: ../plugins/query.py:99
 msgid "the key to search for"
 msgstr "Søgenøgle"
 
-#: ../plugins/query.py:97
+#: ../plugins/query.py:101
 msgid "query in all packages (Default)"
 msgstr "Søg i alle pakker (Default)"
 
-#: ../plugins/query.py:99
+#: ../plugins/query.py:103
 msgid "query in installed packages"
 msgstr "Søg i installerede pakker"
 
-#: ../plugins/query.py:101
+#: ../plugins/query.py:105
 msgid "show only latest packages"
 msgstr "Vis kun nyeste pakker"
 
-#: ../plugins/query.py:103
+#: ../plugins/query.py:107
 msgid "format for displaying found packages"
 msgstr "Visning format for fundne pakker"
 
-#: ../plugins/query.py:105
+#: ../plugins/query.py:109
 msgid "show only results from this REPO"
 msgstr "Vis kun resultater fra denne filkilde : REPO"
 
-#: ../plugins/query.py:107
+#: ../plugins/query.py:111
 msgid "show only results from this ARCH"
 msgstr "Vis kun resultater fra denne architektur : ARCH"
 
-#: ../plugins/query.py:109
+#: ../plugins/query.py:113
 msgid "show only results there provides REQ"
 msgstr "Vis kun resultater som matcher denne udbyder : REQ"
 
-#: ../plugins/query.py:111
+#: ../plugins/query.py:115
 msgid "show only results there requires REQ"
 msgstr "Vis kun resultater som har denne afhængighed : REQ"
 
-#: ../plugins/query.py:113
+#: ../plugins/query.py:117
 msgid "show available tags to use with --queryformat"
 msgstr "Vis tilgængelig visnings tags til brug med  --queryformat"
 
-#: ../plugins/query.py:116
-msgid "show this help about query tool"
-msgstr "Vis denne hjælp om dett værktøj"
+#: ../plugins/query.py:127
+#, python-brace-format
+msgid "Available query-tags: use --queryformat \".. %{tag} ..\""
+msgstr ""
 
-#: ../plugins/query.py:130
-msgid "Available query-tags:"
-msgstr "Tilgænglige visningsnøgler"
-
-#. controls if dnf.base.sack is setup
-#. summary for util, shown in dnf help
-#: ../plugins/sample.py:45
+#. TODO: summary for util, shown in dnf help, add your own
+#: ../plugins/sample.py:48
 msgid "One line description of the util"
 msgstr "Enkelt beskrivelse af værktøj"
 
-#. usage string for the util
-#: ../plugins/sample.py:47
+#. TODO usage string for the util, shown by dnf help <command>
+#: ../plugins/sample.py:50
 msgid "[PARAMETERS]"
 msgstr "[PARAMETRE]"
+
+#: ../dnfutils/__init__.py:62
+msgid "show this help about this tool"
+msgstr ""
