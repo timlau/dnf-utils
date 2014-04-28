@@ -30,6 +30,11 @@ Tools
 ======
 
 * **query** is simplified version of repoquery from yum-utils
+* **dnl** is simplified version of yumdownloader from yum-utils
+
+Documentation:
+===============
+[Online Documentation](http://dnf-utils.readthedocs.org/en/latest/index.html)
 
 
 Contribution:
