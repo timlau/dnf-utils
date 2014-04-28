@@ -22,7 +22,7 @@ archive:
 	@tito build --tgz
 	
 release:
-	@tito release
+	@tito tag
 	@git push
 	@git push --tags origin
 	
