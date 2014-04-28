@@ -78,3 +78,42 @@ Examples
     show installed packages there is requiring **dnf**
 
 
+Dnl Command
+==============
+
+Download packages or package sources.
+
+Synopsis
+--------
+
+``dnf dnl [cmd-options] <pkg-spec> ..``
+
+Arguments
+----------
+
+``<pkg-spec>``
+    package to download (Same package spec af for other dnf commands)    
+
+Cmd Options
+------------
+
+``--show-help``
+    show this help about this tool
+
+``--source``
+    download the src.rpm instead
+    
+``--destdir``
+    download path, default is current dir (the path must exist)
+
+Examples
+--------
+``dnf download dnf``
+    download the latest dnf available package to current dir
+
+``dnf download dnf --destdir /tmp/dnl``
+    download the latest dnf available package to /tmp/dnl (dir must exists)
+    
+``dnf download dnf --source``
+    download the latest dnf available source package to current dir
+    
