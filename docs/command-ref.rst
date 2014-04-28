@@ -106,6 +106,9 @@ Cmd Options
 ``--destdir``
     download path, default is current dir (the path must exist)
 
+``--resolve``
+    resolve and download un-installed dependencies
+
 Examples
 --------
 ``dnf download dnf``
@@ -116,4 +119,7 @@ Examples
     
 ``dnf download dnf --source``
     download the latest dnf available source package to current dir
+
+``dnf download btanks --resolve``
+    download the latest btanks package and the un-installed dependencies to current dir
     

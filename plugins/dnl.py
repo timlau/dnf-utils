@@ -22,6 +22,7 @@ import dnf.cli
 import dnf.exceptions
 import dnf.subject
 import functools
+import hawkey
 import itertools
 import os
 import shutil
@@ -47,13 +48,15 @@ class DnlCommand(dnf.cli.Command):
     usage = _('PACKAGE..')
 
     def configure(self, args):
+        # setup sack and populate it with enabled repos
         demands = self.cli.demands
         demands.sack_activation = True
         demands.available_repos = True
 
+
     def run(self, args):
         ''' execute the util action here '''
-        logger.debug('Command sample : run')
+
         # Setup ArgumentParser to handle util
         # You must only add options not used by dnf already
         self.parser = ArgumentParser(self.aliases[0])
@@ -63,23 +66,26 @@ class DnlCommand(dnf.cli.Command):
                             help=_('download the src.rpm instead'))
         self.parser.add_argument("--destdir",
                             help=_('download path, default is current dir'))
+        self.parser.add_argument("--resolve", action='store_true',
+                            help=_('resolve and download needed dependencies'))
 
         # parse the options/args
         # list available options/args on errors & exit
-        opts = self.parser.parse_args(args)
+        self.opts = self.parser.parse_args(args)
 
         # show util help & exit
-        if opts.show_help:
+        if self.opts.show_help:
             print(self.parser.format_help())
             return 0, ''
 
-        if opts.source:
-            locations = self._download_source(opts.packages)
-        else:
-            locations = self._download_rpms(opts.packages)
 
-        if opts.destdir:
-            dest = opts.destdir
+        if self.opts.source:
+            locations = self._download_source(self.opts.packages)
+        else:
+            locations = self._download_rpms(self.opts.packages)
+
+        if self.opts.destdir:
+            dest = self.opts.destdir
         else:
             dest = os.getcwd()
 
@@ -89,7 +95,10 @@ class DnlCommand(dnf.cli.Command):
 
     def _download_rpms(self, pkg_specs):
         """ Download packages to dnf cache """
-        pkgs = self._get_packages(pkg_specs)
+        if self.opts.resolve:
+            pkgs = self._get_packages_with_deps(pkg_specs)
+        else:
+            pkgs = self._get_packages(pkg_specs)
         self.base.download_packages(pkgs, self.base.output.progress)
         locations = sorted([pkg.localPkg() for pkg in pkgs])
         return locations
@@ -112,6 +121,20 @@ class DnlCommand(dnf.cli.Command):
             queries = map(self._get_query, pkg_specs)
         pkgs = list(itertools.chain(*queries))
         return pkgs
+
+    def _get_packages_with_deps(self, pkg_specs, source=False):
+        """ get packages matching pkg_specs and the deps """
+        pkgs = self._get_packages(pkg_specs)
+        goal = hawkey.Goal(self.base.sack)
+        for pkg in pkgs:
+            goal.install(pkg)
+        rc = goal.run()
+        if rc:
+            pkgs = goal.list_installs()
+            return pkgs
+        else:
+            logger.debug(_("Error in resolve"))
+            return []
 
     def _get_source_packages(self, pkgs):
         """ get list of source rpm names for a list of packages """

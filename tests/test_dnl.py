@@ -37,6 +37,8 @@ class DnlCommandTest(unittest.TestCase):
         self.cmd.cli.base.repos = dnf.repodict.RepoDict()
         self.cmd._get_query = stub_fn
         self.cmd._get_query_source = stub_fn
+        self.cmd.opts = mock.Mock()
+        self.cmd.opts.resolve = False
         repo = RepoStub('foo')
         repo.enable()
         self.cmd.base.repos.add(repo)
