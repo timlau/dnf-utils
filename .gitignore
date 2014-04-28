@@ -3,3 +3,7 @@
 *~
 __pycache__/
 *.nja
+/docs/_*
+*.mo
+*.rpm
+*.tar.gz
