@@ -1,7 +1,7 @@
 %global dnf_version 0.4.19
 
 Name:		dnf-utils
-Version:	0.0.2
+Version:	0.0.3
 Release:	1%{?dist}
 Summary:	Add-on tools for DNF
 Group:		System Environment/Base
@@ -56,6 +56,39 @@ PYTHONPATH=./plugins nosetests-3.3 -s tests/
 %{python3_sitelib}/dnf-plugins/*
 
 %changelog
+* Mon Apr 28 2014 Tim Lauridsen <timlau@fedoraproject.org> 0.0.3-1
+- dnl: PEP8 cleanup (timlau@fedoraproject.org)
+- dnl: code cleanup and better docstrings (timlau@fedoraproject.org)
+- dnl: remove debug prints (timlau@fedoraproject.org)
+- dnl: --dest-dir --> -destdir like yumdownloader (timlau@fedoraproject.org)
+- dnl: fix downloading of source package (timlau@fedoraproject.org)
+- dnl: fix move and pep8 fixes in tests (timlau@fedoraproject.org)
+- dnl: added new dnl tool (timlau@fedoraproject.org)
+- query: show list tags as comma separated (timlau@fedoraproject.org)
+- doc: update README (timlau@fedoraproject.org)
+- --show-help support in tools (timlau@fedoraproject.org)
+- tests: python 3 compabiltty and unittest for shared lib
+  (timlau@fedoraproject.org)
+- pushed translation strings to transifex (timlau@fedoraproject.org)
+- move common functionality into custom ArgumentParser to avoil code
+  duplication (timlau@fedoraproject.org)
+- set demands.available_repos flag to get available repos loaded into the sack
+  (timlau@fedoraproject.org)
+- use dnf.cli.demands in configure instead of class attrubute
+  (timlau@fedoraproject.org)
+- fix not show text in README (timlau@fedoraproject.org)
+- doc: Add more info to README (timlau@fedoraproject.org)
+- update the sample template tool with comment about what is needed to be
+  changed/added for a new tool. (timlau@fedoraproject.org)
+- add real transifex setup. added translation wrapper til query tool refreshed
+  translations (timlau@fedoraproject.org)
+- added --whatrequires renamed --provides to --whatprovides
+  (timlau@fedoraproject.org)
+- added wrapper to format dnf package attr for output. added --showtags,
+  --help-query flags (timlau@fedoraproject.org)
+- query: added --repoid, --arch & --provides options, fixed --latest
+  (timlau@fedoraproject.org)
+
 * Sun Apr 13 2014 Tim Lauridsen <timlau@fedoraproject.org> 0.0.2-1
 - build: add check Makefile target to run tests (timlau@fedoraproject.org)
 - query: added --queryformat option to specify an rpm QUERYFMT like output
