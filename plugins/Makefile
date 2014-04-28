@@ -1,5 +1,5 @@
-PLUGINS  = query
-PLUGINS3 = query
+PLUGINS  = query dnl
+PLUGINS3 = query dnl
 PYTHON=python
 PYTHON3=python3
 PACKAGE = dnf-plugins
