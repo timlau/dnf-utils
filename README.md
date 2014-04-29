@@ -26,6 +26,19 @@ Tools
 * **query** is simplified version of repoquery from yum-utils
 * **dnl** is simplified version of yumdownloader from yum-utils
 
+Install:
+==========
+
+Run this as root from the git checkout to install the tool
+
+```
+make install
+```
+
+or install the latest test build from the (COPR Repository)[http://copr-fe.cloud.fedoraproject.org/coprs/timlau/dnf-utils/]
+
+
+
 Documentation:
 ===============
 [Online Documentation](http://dnf-utils.readthedocs.org/en/latest/index.html)
