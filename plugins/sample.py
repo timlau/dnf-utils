@@ -15,12 +15,12 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-from dnfutils import logger, _, ArgumentParser
+from dnfutils import logger, _
 
 import dnf
 import dnf.cli
 import dnf.exceptions
-
+import dnfutils
 
 # TODO: dnf Plugin class, rename to your <Command>
 class Sample(dnf.Plugin):
@@ -59,7 +59,7 @@ class SampleCommand(dnf.cli.Command):
         logger.debug('Command sample : run')
         # Setup ArgumentParser to handle util
         # You must only add options not used by dnf already
-        self.parser = ArgumentParser(self.aliases[0])
+        self.parser = dnfutils.ArgumentParser(self.aliases[0])
         # TODO: example options/arg add your own
         self.parser.add_argument("cmd", nargs=1, help='the sub command')
         self.parser.add_argument("parms", nargs='*',

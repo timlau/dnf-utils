@@ -16,11 +16,12 @@
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 from datetime import datetime
-from dnfutils import logger, _, ArgumentParser
+from dnfutils import logger, _
 
 import dnf
 import dnf.cli
 import dnf.exceptions
+import dnfutils
 import functools
 import hawkey
 import re
@@ -94,7 +95,7 @@ class QueryCommand(dnf.cli.Command):
     def run(self, args):
         ''' execute the util action here '''
         # Setup ArgumentParser to handle util
-        self.parser = ArgumentParser(self.aliases[0])
+        self.parser = dnfutils.ArgumentParser(self.aliases[0])
         self.parser.add_argument("key", nargs='?',
                             help=_('the key to search for'))
         self.parser.add_argument("--all", action='store_true',
