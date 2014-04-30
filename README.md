@@ -17,7 +17,7 @@ dnf <commmand> [parameters]
 to get help about the tool, use the following command
 
 ```
-dnf <command> --show-help
+dnf <command> --help-cmd
 ```
 
 Tools
