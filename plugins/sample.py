@@ -74,7 +74,7 @@ class SampleCommand(dnf.cli.Command):
         # show util help & exit
         if opts.help_cmd:
             print(self.parser.format_help())
-            return 0, ''
+            return
 
         # TODO: the main tool code, add your own
         print('Sample util is running with :')
@@ -82,4 +82,3 @@ class SampleCommand(dnf.cli.Command):
         print('    parms =     : %s' % opts.parms)
         print('    some-option : %s' % opts.some_option)
 
-        return 0, ''
