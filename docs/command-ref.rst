@@ -33,7 +33,7 @@ Arguments
 Cmd Options
 ------------
 
-``--show-help``
+``--help-cmd``
     show this help about this tool
     
 ``--all``         
@@ -97,7 +97,7 @@ Arguments
 Cmd Options
 ------------
 
-``--show-help``
+``--help-cmd``
     show this help about this tool
 
 ``--source``
