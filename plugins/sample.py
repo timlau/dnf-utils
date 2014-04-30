@@ -50,19 +50,20 @@ class SampleCommand(dnf.cli.Command):
     usage = _('[PARAMETERS]')
 
     def configure(self, args):
+        """ setup the client demands"""
         demands = self.cli.demands
         demands.sack_activation = True
         demands.available_repos = True
 
     def run(self, args):
-        ''' execute the util action here '''
+        """ execute the util action here """
         logger.debug('Command sample : run')
         # Setup ArgumentParser to handle util
         # You must only add options not used by dnf already
         self.parser = dnfutils.ArgumentParser(self.aliases[0])
         # TODO: example options/arg add your own
-        self.parser.add_argument("cmd", nargs=1, help='the sub command')
-        self.parser.add_argument("parms", nargs='*',
+        self.parser.add_argument('cmd', nargs=1, help='the sub command')
+        self.parser.add_argument('parms', nargs='*',
                             help='the parameters to the sub command')
         self.parser.add_argument("--some-option", action='store_true',
                             help='an optional option')

@@ -58,7 +58,7 @@ class QueryCommand(dnf.cli.Command):
     usage = _('[OPTIONS] [KEYWORDS]')
 
     def get_format(self, qf):
-        ''' convert a rpm like QUERYFMT to an python .format() string'''
+        """ convert a rpm like QUERYFMT to an python .format() string """
         def fmt_repl(matchobj):
             fill = matchobj.groups()[0]
             key = matchobj.groups()[1]
@@ -93,28 +93,28 @@ class QueryCommand(dnf.cli.Command):
         demands.available_repos = True
 
     def run(self, args):
-        ''' execute the util action here '''
+        """ execute the util action here """
         # Setup ArgumentParser to handle util
         self.parser = dnfutils.ArgumentParser(self.aliases[0])
-        self.parser.add_argument("key", nargs='?',
+        self.parser.add_argument('key', nargs='?',
                             help=_('the key to search for'))
-        self.parser.add_argument("--all", action='store_true',
+        self.parser.add_argument('--all', action='store_true',
                             help=_('query in all packages (Default)'))
-        self.parser.add_argument("--installed", action='store_true',
+        self.parser.add_argument('--installed', action='store_true',
                             help=_('query in installed packages'))
-        self.parser.add_argument("--latest", action='store_true',
+        self.parser.add_argument('--latest', action='store_true',
                             help=_('show only latest packages'))
-        self.parser.add_argument("--qf", "--queryformat", dest='queryformat',
+        self.parser.add_argument('--qf', "--queryformat", dest='queryformat',
                             help=_('format for displaying found packages'))
-        self.parser.add_argument("--repoid", metavar='REPO',
+        self.parser.add_argument('--repoid', metavar='REPO',
                             help=_('show only results from this REPO'))
-        self.parser.add_argument("--arch", metavar='ARCH',
+        self.parser.add_argument('--arch', metavar='ARCH',
                             help=_('show only results from this ARCH'))
-        self.parser.add_argument("--whatprovides", metavar='REQ',
+        self.parser.add_argument('--whatprovides', metavar='REQ',
                             help=_('show only results there provides REQ'))
-        self.parser.add_argument("--whatrequires", metavar='REQ',
+        self.parser.add_argument('--whatrequires', metavar='REQ',
                             help=_('show only results there requires REQ'))
-        self.parser.add_argument("--showtags", action='store_true',
+        self.parser.add_argument('--showtags', action='store_true',
                             help=_('show available tags to use with '
                                  '--queryformat'))
         logger.debug('Command sample : run')
@@ -137,7 +137,7 @@ class QueryCommand(dnf.cli.Command):
         if opts.latest:
             q = q.latest()
         if opts.key:
-            if set(opts.key) & set("*[?"):  # is pattern ?
+            if set(opts.key) & set('*[?'):  # is pattern ?
                 fdict = {'name__glob': opts.key}
             else:  # substring
                 fdict = {'name__substr': opts.key}
@@ -217,7 +217,7 @@ class PackageWrapper:
             dt = datetime.fromtimestamp(timestamp)
             return dt.strftime("%Y-%m-%d %H:%M")
         else:
-            return ""
+            return ''
 
     def _reldep_to_list(self, obj):
-        return ", ".join([str(reldep) for reldep in obj])
+        return ', '.join([str(reldep) for reldep in obj])
