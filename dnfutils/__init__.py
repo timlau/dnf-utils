@@ -58,7 +58,7 @@ class ArgumentParser(argparse.ArgumentParser):
     def __init__(self, cmd, **kwargs):
         argparse.ArgumentParser.__init__(self, prog="dnf {}".format(cmd),
                                          add_help=False, **kwargs)
-        self.add_argument("--show-help".format(cmd), action='store_true',
+        self.add_argument("--help-cmd", action='store_true',
                           help=_('show this help about this tool'))
 
     def error(self, message):

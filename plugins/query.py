@@ -119,14 +119,14 @@ class QueryCommand(dnf.cli.Command):
         logger.debug('Command sample : run')
         opts = self.parser.parse_args(args)
 
-        if opts.show_help:  # show help and exit
+        if opts.help_cmd:
             print(self.parser.format_help())
-            return 0, ''
+            return
 
         if opts.showtags:
             print(_('Available query-tags: use --queryformat ".. %{tag} .."'))
             print(QUERY_TAGS)
-            return 0, ''
+            return
 
         q = self.base.sack.query()
         if opts.all:
@@ -151,7 +151,6 @@ class QueryCommand(dnf.cli.Command):
             q = self.by_requires(self.base.sack, opts.whatrequires, q)
         fmt = self.get_format(opts.queryformat)
         self.show_packages(q, fmt)
-        return 0, ''
 
     def by_provides(self, sack, pattern, query):
         try:

@@ -74,9 +74,9 @@ class DnlCommand(dnf.cli.Command):
         self.opts = self.parser.parse_args(args)
 
         # show util help & exit
-        if self.opts.show_help:
+        if self.opts.help_cmd:
             print(self.parser.format_help())
-            return 0, ''
+            return
 
 
         if self.opts.source:
@@ -91,7 +91,7 @@ class DnlCommand(dnf.cli.Command):
 
         move = functools.partial(self._move_package, dest)
         map(move, locations)
-        return 0, ''
+        return
 
     def _download_rpms(self, pkg_specs):
         """ Download packages to dnf cache """

@@ -72,7 +72,7 @@ class SampleCommand(dnf.cli.Command):
         opts = self.parser.parse_args(args)
 
         # show util help & exit
-        if opts.show_help:
+        if opts.help_cmd:
             print(self.parser.format_help())
             return 0, ''
 

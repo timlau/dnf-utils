@@ -33,12 +33,12 @@ class DnfUtilsTest(unittest.TestCase):
         parser.add_argument("parms", nargs='*')
         self.assertEqual(parser.prog, 'dnf test')
         # test --show-help is added
-        self.assertIn('--show-help', parser._option_string_actions)
+        self.assertIn('--help-cmd', parser._option_string_actions)
         # test unknown option
         self.assertRaises(dnf.exceptions.Error, parser.parse_args, ['--dummy'])
         # test --show-help is working
-        opts = parser.parse_args(['subcmd', '--show-help'])
-        self.assertTrue(opts.show_help)
+        opts = parser.parse_args(['subcmd', '--help-cmd'])
+        self.assertTrue(opts.help_cmd)
         # test args
         opts = parser.parse_args(['subcmd', 'parm1', 'parm2'])
         self.assertEqual(opts.cmd, ['subcmd'])
