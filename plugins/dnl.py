@@ -35,7 +35,7 @@ class Dnl(dnf.Plugin):
     def __init__(self, base, cli):
         self.base = base
         self.cli = cli
-        logger.debug('Initialized %s plugin' % self.name)
+        logger.debug('Initialized %s plugin', self.name)
         if self.cli is not None:
             self.cli.register_command(DnlCommand)
 
@@ -53,7 +53,6 @@ class DnlCommand(dnf.cli.Command):
         demands.sack_activation = True
         demands.available_repos = True
 
-
     def run(self, args):
         ''' execute the util action here '''
 
@@ -61,13 +60,15 @@ class DnlCommand(dnf.cli.Command):
         # You must only add options not used by dnf already
         self.parser = ArgumentParser(self.aliases[0])
         self.parser.add_argument("packages", nargs='*',
-                            help=_('packages to download'))
+                                 help=_('packages to download'))
         self.parser.add_argument("--source", action='store_true',
-                            help=_('download the src.rpm instead'))
+                                 help=_('download the src.rpm instead'))
         self.parser.add_argument("--destdir",
-                            help=_('download path, default is current dir'))
+                                 help=_('download path, '
+                                        'default is current dir'))
         self.parser.add_argument("--resolve", action='store_true',
-                            help=_('resolve and download needed dependencies'))
+                                 help=_('resolve and download '
+                                        'needed dependencies'))
 
         # parse the options/args
         # list available options/args on errors & exit
@@ -77,7 +78,6 @@ class DnlCommand(dnf.cli.Command):
         if self.opts.help_cmd:
             print(self.parser.format_help())
             return
-
 
         if self.opts.source:
             locations = self._download_source(self.opts.packages)
@@ -122,7 +122,7 @@ class DnlCommand(dnf.cli.Command):
         pkgs = list(itertools.chain(*queries))
         return pkgs
 
-    def _get_packages_with_deps(self, pkg_specs, source=False):
+    def _get_packages_with_deps(self, pkg_specs):
         """ get packages matching pkg_specs and the deps """
         pkgs = self._get_packages(pkg_specs)
         goal = hawkey.Goal(self.base.sack)
@@ -165,7 +165,7 @@ class DnlCommand(dnf.cli.Command):
             if src_repo:
                 logger.info(_("enabled {} repository").format(src_repo.id))
                 src_repo.enable()
-       # reload the sack
+        # reload the sack
         self.base.fill_sack()
 
     def _get_query(self, pkg_spec):

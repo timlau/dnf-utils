@@ -26,7 +26,7 @@ import dnf.exceptions
 import gettext
 import logging
 
-#lint:disable
+# lint:disable
 # python 3 compabillity settings
 if version_info.major >= 3:
     PY3 = True
@@ -38,7 +38,7 @@ else:
     from __builtin__ import unicode, basestring
     PY3 = False
 
-#lint:enable
+# lint:enable
 
 t = gettext.translation('dnf-utils', fallback=True)
 _ = t.ugettext

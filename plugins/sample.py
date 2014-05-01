@@ -22,6 +22,7 @@ import dnf.cli
 import dnf.exceptions
 import dnfutils
 
+
 # TODO: dnf Plugin class, rename to your <Command>
 class Sample(dnf.Plugin):
 
@@ -31,7 +32,7 @@ class Sample(dnf.Plugin):
     def __init__(self, base, cli):
         self.base = base
         self.cli = cli
-        logger.debug('Initialized %s plugin' % self.name)
+        logger.debug('Initialized %s plugin', self.name)
         if self.cli is not None:
             # TODO: use your own <Command>Command class here
             self.cli.register_command(SampleCommand)
@@ -42,7 +43,7 @@ class SampleCommand(dnf.cli.Command):
     """ the util command there is extending the dnf command line """
 
     # TODO: the tool command, use your own command
-    aliases = ['sample']
+    aliases = ["sample"]
 
     # TODO: summary for util, shown in dnf help, add your own
     summary = _('One line description of the util')
@@ -64,9 +65,9 @@ class SampleCommand(dnf.cli.Command):
         # TODO: example options/arg add your own
         self.parser.add_argument('cmd', nargs=1, help='the sub command')
         self.parser.add_argument('parms', nargs='*',
-                            help='the parameters to the sub command')
+                                 help='the parameters to the sub command')
         self.parser.add_argument("--some-option", action='store_true',
-                            help='an optional option')
+                                 help='an optional option')
 
         # parse the options/args
         # list available options/args on errors & exit
@@ -82,4 +83,3 @@ class SampleCommand(dnf.cli.Command):
         print('    cmd =       : %s' % opts.cmd)
         print('    parms =     : %s' % opts.parms)
         print('    some-option : %s' % opts.some_option)
-

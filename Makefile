@@ -54,9 +54,24 @@ transifex-push:
 	make -C po ${PKGNAME}.pot
 	tx push -s
 	@echo "You can now git commit -a -m 'Transfix push, ${PKGNAME}.pot update'"
+	
+inst-build-dep:
+	sudo dnf install python3-pylint python3-pep8 python-nose python3-nose dnf python3-devel
 
 check:
 	PYTHONPATH="./:./plugins/" nosetests -s tests/
+	
+lint:
+	@echo -------------- PEP8 ------------------------
+	@-python3-pep8 --max-line-length=80 plugins/*.py dnfutils/*.py -v
+	@echo -------------- Pylint ------------------------
+	@-python3-pylint --rcfile misc/pylint.rc plugins/*.py dnfutils/*.py -r n
+
+lint-verbose:
+	@echo -------------- PEP8 ------------------------
+	@-python3-pep8 --max-line-length=80 plugins/*.py dnfutils/*.py -v
+	@echo -------------- Pylint ------------------------
+	@-python3-pylint --rcfile misc/pylint.rc plugins/*.py dnfutils/*.py
 
 FORCE:
 	
