@@ -26,7 +26,7 @@ import dnfutils
 # TODO: dnf Plugin class, rename to your <Command>
 class Sample(dnf.Plugin):
 
-    # TODO: Use your own command name here
+    # TODO: Use your own command name here (lowercase)
     name = 'sample'
 
     def __init__(self, base, cli):
@@ -58,24 +58,23 @@ class SampleCommand(dnf.cli.Command):
 
     def run(self, args):
         """ execute the util action here """
-        logger.debug('Command sample : run')
         # Setup ArgumentParser to handle util
         # You must only add options not used by dnf already
-        self.parser = dnfutils.ArgumentParser(self.aliases[0])
+        parser = dnfutils.ArgumentParser(self.aliases[0])
         # TODO: example options/arg add your own
-        self.parser.add_argument('cmd', nargs=1, help='the sub command')
-        self.parser.add_argument('parms', nargs='*',
+        parser.add_argument('cmd', nargs=1, help='the sub command')
+        parser.add_argument('parms', nargs='*',
                                  help='the parameters to the sub command')
-        self.parser.add_argument("--some-option", action='store_true',
+        parser.add_argument("--some-option", action='store_true',
                                  help='an optional option')
 
         # parse the options/args
         # list available options/args on errors & exit
-        opts = self.parser.parse_args(args)
+        opts = parser.parse_args(args)
 
         # show util help & exit
         if opts.help_cmd:
-            print(self.parser.format_help())
+            print(parser.format_help())
             return
 
         # TODO: the main tool code, add your own
