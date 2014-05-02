@@ -7,3 +7,5 @@ __pycache__/
 *.mo
 *.rpm
 *.tar.gz
+/.project
+/.pydevproject

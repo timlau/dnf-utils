@@ -63,15 +63,15 @@ check:
 	
 lint:
 	@echo -------------- PEP8 ------------------------
-	@-python3-pep8 --max-line-length=80 plugins/*.py dnfutils/*.py -v
+	@-python3-pep8 --max-line-length=80 plugins/*.py dnfutils/*.py -v ||:
 	@echo -------------- Pylint ------------------------
-	@-python3-pylint --rcfile misc/pylint.rc plugins/*.py dnfutils/*.py -r n
+	@-python3-pylint --rcfile misc/pylint.rc plugins/*.py dnfutils/*.py -r n ||: 
 
 lint-verbose:
 	@echo -------------- PEP8 ------------------------
-	@-python3-pep8 --max-line-length=80 plugins/*.py dnfutils/*.py -v
+	@-python3-pep8 --max-line-length=80 plugins/*.py dnfutils/*.py -v ||:
 	@echo -------------- Pylint ------------------------
-	@-python3-pylint --rcfile misc/pylint.rc plugins/*.py dnfutils/*.py
+	@-python3-pylint --rcfile misc/pylint.rc plugins/*.py dnfutils/*.py ||:
 
 FORCE:
 	
