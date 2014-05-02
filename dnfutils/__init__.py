@@ -30,12 +30,12 @@ import logging
 # python 3 compabillity settings
 if version_info.major >= 3:
     PY3 = True
-    basestring = unicode = str
+    basestring = unicode = str  # @UnusedVariable
     # u?gettext dont exists in python3 NullTranslations
     NullTranslations.ugettext = NullTranslations.gettext
     NullTranslations.ungettext = NullTranslations.ngettext
 else:
-    from __builtin__ import unicode, basestring
+    from __builtin__ import unicode, basestring  # @UnresolvedImport
     PY3 = False
 
 # lint:enable

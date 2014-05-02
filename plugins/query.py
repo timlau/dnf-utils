@@ -95,33 +95,33 @@ class QueryCommand(dnf.cli.Command):
     def run(self, args):
         """ execute the util action here """
         # Setup ArgumentParser to handle util
-        self.parser = dnfutils.ArgumentParser(self.aliases[0])
-        self.parser.add_argument('key', nargs='?',
-                                 help=_('the key to search for'))
-        self.parser.add_argument('--all', action='store_true',
-                                 help=_('query in all packages (Default)'))
-        self.parser.add_argument('--installed', action='store_true',
-                                 help=_('query in installed packages'))
-        self.parser.add_argument('--latest', action='store_true',
-                                 help=_('show only latest packages'))
-        self.parser.add_argument('--qf', "--queryformat", dest='queryformat',
-                                 help=_('format for displaying found packages'))
-        self.parser.add_argument('--repoid', metavar='REPO',
-                                 help=_('show only results from this REPO'))
-        self.parser.add_argument('--arch', metavar='ARCH',
-                                 help=_('show only results from this ARCH'))
-        self.parser.add_argument('--whatprovides', metavar='REQ',
-                                 help=_('show only results there provides REQ'))
-        self.parser.add_argument('--whatrequires', metavar='REQ',
-                                 help=_('show only results there requires REQ'))
-        self.parser.add_argument('--showtags', action='store_true',
-                                 help=_('show available tags to use with '
-                                        '--queryformat'))
+        parser = dnfutils.ArgumentParser(self.aliases[0])
+        parser.add_argument('key', nargs='?',
+                            help=_('the key to search for'))
+        parser.add_argument('--all', action='store_true',
+                            help=_('query in all packages (Default)'))
+        parser.add_argument('--installed', action='store_true',
+                            help=_('query in installed packages'))
+        parser.add_argument('--latest', action='store_true',
+                            help=_('show only latest packages'))
+        parser.add_argument('--qf', "--queryformat", dest='queryformat',
+                            help=_('format for displaying found packages'))
+        parser.add_argument('--repoid', metavar='REPO',
+                            help=_('show only results from this REPO'))
+        parser.add_argument('--arch', metavar='ARCH',
+                            help=_('show only results from this ARCH'))
+        parser.add_argument('--whatprovides', metavar='REQ',
+                            help=_('show only results there provides REQ'))
+        parser.add_argument('--whatrequires', metavar='REQ',
+                            help=_('show only results there requires REQ'))
+        parser.add_argument('--showtags', action='store_true',
+                            help=_('show available tags to use with '
+                                   '--queryformat'))
         logger.debug('Command sample : run')
-        opts = self.parser.parse_args(args)
+        opts = parser.parse_args(args)
 
         if opts.help_cmd:
-            print(self.parser.format_help())
+            print(parser.format_help())
             return
 
         if opts.showtags:

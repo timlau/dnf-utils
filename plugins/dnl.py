@@ -19,7 +19,6 @@ from dnfutils import logger, _, ArgumentParser
 
 import dnf
 import dnf.cli
-import dnf.exceptions
 import dnf.subject
 import functools
 import hawkey
