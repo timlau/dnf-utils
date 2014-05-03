@@ -64,9 +64,9 @@ class SampleCommand(dnf.cli.Command):
         # TODO: example options/arg add your own
         parser.add_argument('cmd', nargs=1, help='the sub command')
         parser.add_argument('parms', nargs='*',
-                                 help='the parameters to the sub command')
+                            help='the parameters to the sub command')
         parser.add_argument("--some-option", action='store_true',
-                                 help='an optional option')
+                            help='an optional option')
 
         # parse the options/args
         # list available options/args on errors & exit
