@@ -50,7 +50,7 @@ class Query(dnf.Plugin):
 
 
 class QueryCommand(dnf.cli.Command):
-    """ the util command there is extending the dnf command line """
+    """The util command there is extending the dnf command line """
     aliases = ['query']
     # summary for util, shown in dnf help
     summary = _('search for packages matching keyword')
@@ -58,7 +58,7 @@ class QueryCommand(dnf.cli.Command):
     usage = _('[OPTIONS] [KEYWORDS]')
 
     def get_format(self, qf):
-        """ convert a rpm like QUERYFMT to an python .format() string """
+        """Convert a rpm like QUERYFMT to an python .format() string """
         def fmt_repl(matchobj):
             fill = matchobj.groups()[0]
             key = matchobj.groups()[1]
@@ -78,6 +78,7 @@ class QueryCommand(dnf.cli.Command):
         return fmt
 
     def show_packages(self, query, fmt):
+        """Print packages in a query, in a given format."""
         for po in query.run():
             try:
                 pkg = PackageWrapper(po)
@@ -93,7 +94,7 @@ class QueryCommand(dnf.cli.Command):
         demands.available_repos = True
 
     def run(self, args):
-        """ execute the util action here """
+        """Execute the util action here."""
         # Setup ArgumentParser to handle util
         parser = dnfutils.ArgumentParser(self.aliases[0])
         parser.add_argument('key', nargs='?',
@@ -154,6 +155,7 @@ class QueryCommand(dnf.cli.Command):
         self.show_packages(q, fmt)
 
     def by_provides(self, sack, pattern, query):
+        """Get a query for matching given provides."""
         try:
             reldeps = list(map(functools.partial(hawkey.Reldep, sack),
                                pattern))
@@ -162,6 +164,7 @@ class QueryCommand(dnf.cli.Command):
         return query.filter(provides=reldeps)
 
     def by_requires(self, sack, pattern, query):
+        """Get a query for matching given requirements."""
         try:
             reldep = hawkey.Reldep(sack, pattern)
         except hawkey.ValueException:
@@ -170,6 +173,7 @@ class QueryCommand(dnf.cli.Command):
 
 
 class PackageWrapper(object):
+    """Wrapper for dnf.package.Package, so we can control formatting."""
 
     def __init__(self, pkg):
         self._pkg = pkg
