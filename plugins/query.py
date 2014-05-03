@@ -118,7 +118,6 @@ class QueryCommand(dnf.cli.Command):
         parser.add_argument('--showtags', action='store_true',
                             help=_('show available tags to use with '
                                    '--queryformat'))
-        logger.debug('Command sample : run')
         opts = parser.parse_args(args)
 
         if opts.help_cmd:
